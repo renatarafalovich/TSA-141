@@ -24,33 +24,37 @@ double calculateVolume(double radius);
 double calculateSurfaceArea(double radius);
 
 /**
+ * @brief проверяет, что радиус положительный
+ * @param radius - радиус шара
+ */
+void checkR(double radius);
+
+/**
  * @brief точка входа в программу
  * @return 0, если программа выполнена корректно, иначе 1
  */
-int main() {
+int main() 
+{
     cout << "Enter the radius of the sphere: ";
     double radius = getValue();
 
-    if (radius < 0) {
-        cout << "Radius cannot be negative." << endl;
-        return 1; // Возвращаем код ошибки
-    }
+  checkR(radius);
 
-    double volume = calculateVolume(radius);
-    double surfaceArea = calculateSurfaceArea(radius);
 
     cout << fixed << setprecision(2); // Устанавливаем вывод с двумя знаками после запятой
 
-    cout << "Volume of the sphere: " << volume << endl;
-    cout << "Surface area of the sphere: " << surfaceArea << endl;
+    cout << "Volume of the sphere: " << calculateVolume(radius) << endl;
+    cout << "Surface area of the sphere: " << calculateSurfaceArea(radius) << endl;
 
     return 0;
 }
 
-double getValue() {
-    double value;
+double getValue()
+{
+    double value=0;
     cin >> value;
-    if (cin.fail()) {
+    if (cin.fail()) 
+    {
         cout << "Incorrect input. Please enter a number." << endl;
         cin.clear();
         cin.ignore(1000, '\n');
@@ -59,9 +63,21 @@ double getValue() {
     return value;
 }
 
-double calculateVolume(double radius) {
+double calculateVolume(double radius) 
+{
     return (4.0 / 3.0) * M_PI * pow(radius, 3);
 }
 
-double calculateSurfaceArea(double radius) {
+double calculateSurfaceArea(double radius) 
+{
     return 4.0 * M_PI * pow(radius, 2);
+}  
+
+void checkR(double radius)
+{
+    if (radius < 0) 
+    {
+        cout << "Radius cannot be negative." << endl;
+       abort();
+    }
+} 
