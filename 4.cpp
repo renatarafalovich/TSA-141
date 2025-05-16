@@ -1,63 +1,79 @@
-#include <iostream>
-#include <limits>
-#include <cmath> // Для sqrt и cbrt
+#include <iostream> // Подключение библиотеки для ввода-вывода
+#include <limits>   // Подключение библиотеки для работы с ограничениями типов данных (не используется явно в данном коде)
+#include <cmath>    // Подключение библиотеки для математических функций, таких как sqrt и cbrt
+
+// Объявление функции getValue, возвращающей значение типа double, для получения пользовательского ввода
 double getValue();
+
+// Объявление функции checkStep, проверяющей допустимость шага
 void checkStep(const double step);
+
+// Объявление функции getY, вычисляющей значение функции для заданного x
 double getY(const double x);
+
+// Объявление функции isDomain, проверяющей, входит ли x в допустимую область определения функции
 bool isDomain(const double x);
 
-using namespace std;
-int main()
+using namespace std; // Использование пространства имен std для сокращения кода
+
+int main() // Основная функция программы
 {
-    cout << "Enter xn: ";
-    double xstart = getValue();
-    cout << "Enter xk: ";
-    double xend = getValue();
-    cout << "Enter step: ";
-    double step = getValue();
-    checkStep(step);
+    cout << "Enter xn: "; // Запрос начальной точки интервала
+    double xstart = getValue(); // Получение начального значения x
+    cout << "Enter xk: "; // Запрос конечной точки интервала
+    double xend = getValue(); // Получение конечного значения x
+    cout << "Enter step: "; // Запрос шага итерации
+    double step = getValue(); // Получение значения шага
+    checkStep(step); // Проверка допустимости шага
+
+    // Цикл по x от xstart до xend с шагом step
     for (double x = xstart; x < xend + step; x += step) 
-{
-        cout << "x = " << x;
-        if (isDomain(x)) 
-{
-            cout << " y = " << getY(x) << endl;
-        } 
-        else 
+    {
+        cout << "x = " << x; // Вывод текущего значения x
+        if (isDomain(x)) // Проверка, входит ли x в область допустимых значений функции
         {
-            cout << " not in domain" << endl;
+            cout << " y = " << getY(x) << endl; // Вычисление и вывод значения функции
+        } 
+        else // Если x за пределами области определения
+        {
+            cout << " not in domain" << endl; // Сообщение о недопустимости
         }
     }
-    return 0;
+    return 0; // Завершение программы
 }
 
-double getValue() {
+// Определение функции getValue для безопасного получения числа с ввода
+double getValue() 
+{
     double value;
-    cin >> value;
-    if (cin.fail()) 
+    cin >> value; // Чтение значения с клавиатуры
+    if (cin.fail()) // Проверка, произошла ли ошибка ввода
     {
-        cout << "Incorrect value" << endl;
-        abort();
+        cout << "Incorrect value" << endl; // Сообщение о неправильном вводе
+        abort(); // Немедленное завершение программы
     }
-    return value;
+    return value; // Возврат введенного значения
 }
 
+// Определение функции checkStep для проверки корректности шага
 void checkStep(const double step) 
 {
-    if (step <= 0) 
+    if (step <= 0) // Шаг должен быть положительным
     {
-        cout << "Error value" << endl;
-        abort();
+        cout << "Error value" << endl; // Сообщение об ошибке
+        abort(); // Прерывание программы
     }
 }
 
+// Определение функции getY, вычисляющей значение функции для x
 double getY(const double x) 
 {
-    return x + sqrt(x) + cbrt(x) - 2.5;
+    return x + sqrt(x) + cbrt(x) - 2.5; // Формула функции: x + sqrt(x) + cbrt(x) - 2.5
 }
 
+// Определение функции isDomain, проверяющей допустимость x
 bool isDomain(const double x)  
 {
-    // Для определения допустимости вычисления sqrt(x), x должен быть >= 0
-    return x >= 0;
+    // Для вычисления sqrt(x) x должен быть неотрицательным
+    return x >= 0; // Возвращает true, если x >= 0
 }
