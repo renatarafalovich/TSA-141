@@ -1,169 +1,259 @@
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
 
-#include <iostream> // Подключение библиотеки для ввода-вывода
+using namespace std;
 
-// Объявление функции получения значения типа int с проверки
+/**
+ * @brief считывает целое число с клавиатуры с проверкой ввода
+ * @return считанное значение
+*/
 int getValue();
 
-// Объявление функции получения размера массива типа size_t
+/**
+ * @brief Получает и проверяет размер массива
+ * @return Размер массива
+ */
 size_t getSize();
 
-// Объявление функции проверки корректности введенного n
+/**
+ * @brief Проверяет корректность размера массива
+ * @param n Проверяемое значение размера
+ * @return Завершает программу при n <= 0
+ */
 void checkN(const int n);
 
-// Объявление функции для заполнения массива значениями, введёнными пользователем
-void fillArray(int* arr, const int n);
-
-// Объявление функции для вывода массива на экран
+/**
+ * @brief Заполняет массив случайными значениями
+ * @param arr Указатель на массив
+ * @param n Размер массива
+ * @param minn Минимальное значение
+ * @param maxn Максимальное значение
+ */
+void fillArrayRandom(int* arr, const int n, const int minn, const int maxn);
+/**
+ * @brief Заполняет массив случайными значениями
+ * @param arr Указатель на массив
+ * @param n Размер массива
+ */
+void fillArrayManualy(int* arr, const int n);
+/**
+ * @brief выводит массив
+ * @param arr Указатель на массив
+ * @param n Размер массива
+ */
 void printArray(int* arr, const int n);
-
-// Объявление функции, вычисляющей сумму элементов с нечётными индексами
-int sumOfElementsWithOddIndices(int* arr, const int n);
-
-// Объявление функции для подсчёта элементов массива, больших A и делящихся на 5
-int countElementsGreaterThanAAndDivisibleBy5(int* arr, const int n, int A);
-
-// Объявление функции для деления элементов с чётными индексами на первый элемент массива
-void divideEvenIndexElementsByFirst(int* arr, const int n);
-
-// Объявление функции для получения первого элемента массива
-int getFirstElement(int* arr, const int n);
-
-using namespace std; // Использование пространства имен std
-
-int main() // Точка входа программы
+/**
+ * @brief рассчитывает сумму элементов
+ * @param arr Указатель на массив
+ * @param n Размер массива
+ */
+int sumOfElements(int* arr, const int n);
+/**
+ * @brief сортирует значения массива
+ * @param arr Указатель на массив
+ * @param n Размер массива
+ */
+void sortArray(int* arr, const int n);
+/**
+ * @brief ищет отрицательные значения в массиве
+ * @param arr Указатель на массив
+ * @param n Размер массива
+ */
+size_t getIndexOfFirstNegative(int* arr, const int n);
+/**
+ * @brief создает другой массив для сортировки 
+ * @param arr Указатель на массив
+ * @param n Размер массива
+ */
+int* copyArray(int* arr, const int n);
+/**
+* @brief Перечисление для выбора способа заполнения данных
+* @param MANUALY Выбор ручного заполнения массива
+* @param RANDOM Выбор автоматического заполнения массива
+*/
+enum FillMode { RANDOM, MANUALY };
+/**
+ * @brief Точка входа в программу
+ * @return 0 при успешном выполнении
+ */
+int main()
 {
-    size_t n = getSize(); // Получение размера массива n с проверкой
-    int* arr = new int [n]; // Выделение динамической памяти под массив из n элементов
-    fillArray(arr, n); // Заполнение массива значениями с помощью функции
-    printArray(arr,n); // Вывод массива на экран
+    size_t n = getSize();
+    int* arr = new int[n];
+    cout << "Select fill mode (0 - RANDOM, 1 - MANUAL): ";
+    int select = getValue();
 
-    // 1. Найти сумму элементов, имеющих нечётные индексы
-    int sumOddIndices = sumOfElementsWithOddIndices(arr, n);
-    cout<<"Sum of elements with odd indices: "<<sumOddIndices<<endl; // Вывод суммы
-
-    // 2. Подсчитать количество элементов массива, которые больше A и делятся на 5
-    cout<<"Enter number A: ";
-    int A = getValue(); // Получение числа A с проверкой
-    int count = countElementsGreaterThanAAndDivisibleBy5(arr, n, A); // Подсчёт подходящих элементов
-    cout<<"Count of elements > A and divisible by 5: "<<count<<endl; // Вывод результата
-
-    // 3. Разделить все элементы с чётными индексами на первый элемент массива
-    // Перед этим проверка, что первый элемент не равен 0
-    int firstElement = getFirstElement(arr, n); // Получение первого элемента массива
-    if (firstElement != 0) // Проверка деления на ноль
+    switch (select)
     {
-        divideEvenIndexElementsByFirst(arr, n); // Выполнение деления элементов
-        cout<<"Array after dividing elements with even indices by first element: ";
-        printArray(arr, n); // Вывод изменённого массива
+    case RANDOM:
+        fillArrayRandom(arr, n, -10, 20);  // Изменен диапазон на [-10;20]
+        break;
+    case MANUALY:
+        fillArrayManualy(arr, n);
+        break;
+    default:
+        cout << "erorr" << endl;
+        delete[] arr;
+        return 1;
     }
-    else // Если первый элемент равен 0
+    cout << "Original array: ";
+    printArray(arr, n);
+
+    // Задание 1: Сумма элементов с нечетными индексами
+    int sumOddIndex = 0;
+    for (size_t i = 1; i < n; i += 2) {
+        sumOddIndex += arr[i];
+    }
+    cout << "Sum of elements with odd indices: " << sumOddIndex << endl;
+
+    // Задание 2: Количество элементов > A и кратных 5
+    cout << "Enter number A: ";
+    int A = getValue();
+    int count = 0;
+    for (size_t i = 0; i < n; i++) {
+        if (arr[i] > A && arr[i] % 5 == 0) {
+            count++;
+        }
+    }
+    cout << "Count of elements > " << A << " and multiples of 5: " << count << endl;
+
+    // Задание 3: Деление четных элементов на первый элемент
+    if (arr[0] != 0) {
+        int* modifiedArr = copyArray(arr, n);
+        for (size_t i = 1; i < n; i += 2) {  // Четные индексы (поскольку индексация с 0)
+            modifiedArr[i] /= arr[0];
+        }
+        cout << "Array after dividing even-indexed elements by first element: ";
+        printArray(modifiedArr, n);
+        delete[] modifiedArr;
+    }
+    else {
+        cout << "Cannot divide by zero (first element is 0)" << endl;
+    }
+
+    // Оригинальные выводы из кода
+    cout << "Sum of elements multiples 3: " << sumOfElements(arr, n) << endl;
+    size_t index = getIndexOfFirstNegative(arr, n);
+    if (index == n)
     {
-        cout<<"First element is zero, division not performed."<<endl;
+        cout << "No negative elements" << endl;
     }
+    else
+    {
+        cout << "Index of first negative element: " << index + 1 << endl;
+    }
+    int* sortArr = copyArray(arr, n);
+    sortArray(sortArr, n);
+    cout << "Sorted array: ";
+    printArray(sortArr, n);
+    delete[] sortArr;
+    delete[] arr;
 
-    delete[] arr; // Освобождение выделенной памяти
-
-    return 0; // Завершение программы
+    return 0;
 }
 
-// Реализация функции получения значения с проверкой
+// Остальные функции остаются без изменений
 int getValue()
 {
-    int value = 0;
-    cin>>value; // Ввод значения
-    if (cin.fail()) // Проверка ошибок ввода
-    {
-        cout<<"Error"<<endl; // Сообщение об ошибке
-        abort(); // Прерывание программы в случае ошибки
+    int value;
+    while (!(cin >> value)) {
+        cout << "Invalid input. Please enter an integer: ";
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
     }
-    return value; // Возврат введенного значения
+    return value;
 }
 
-// Реализация функции получения размера массива с проверкой
 size_t getSize()
 {
-    std::cout<<"Enter n"<<endl; // Запрос размера n
-    int n = getValue(); // Ввод n
-    checkN(n); // Проверка корректности n
-    return (size_t)n; // Возврат в виде size_t
+    cout << "Enter array size (n >= 1): ";
+    int n = getValue();
+    checkN(n);
+    return static_cast<size_t>(n);
 }
 
-// Проверка корректности n (должно быть положительным)
 void checkN(const int n)
 {
-    if (n<=0) // Если n не положительно
+    if (n <= 0)
     {
-        cout<<"Error"<<endl; // Сообщение об ошибке
-        abort(); // Завершение программы
+        cout << "Error: size must be >= 1" << endl;
+        exit(1);
     }
 }
 
-// Заполнение массива значениями, введёнными пользователем
-void fillArray(int* arr, const int n)
+void fillArrayRandom(int* arr, const int n, const int minn, const int maxn)
 {
-    for (size_t i = 0; i < n; i++) // Итерация по индексам массива
+    srand(time(0));
+    for (size_t i = 0; i < n; i++)
     {
-        cout<<"Enter arr["<<i+1<<"] = "; // Запрос значения для элемента i
-        arr[i] = getValue(); // Ввод значения и запись в массив
+        arr[i] = rand() % (maxn - minn + 1) + minn;
     }
 }
 
-// Вывод массива на экран
+void fillArrayManualy(int* arr, const int n)
+{
+    for (size_t i = 0; i < n; i++)
+    {
+        cout << "[" << i + 1 << "] = ";
+        arr[i] = getValue();
+    }
+}
+
 void printArray(int* arr, const int n)
 {
-    for (size_t i = 0; i < n; i++) // Итерация по элементам массива
+    for (size_t i = 0; i < n; i++)
     {
-        cout<<arr[i]<<" "; // Вывод элемента и пробел
+        cout << arr[i] << " ";
     }
-    cout<<endl; // Перевод строки после вывода массива
+    cout << endl;
 }
 
-// Подсчёт суммы элементов с нечётными индексами
-int sumOfElementsWithOddIndices(int* arr, const int n)
+int sumOfElements(int* arr, const int n)
 {
-    int result = 0; // Изначально сумма равна 0
-    for (size_t i = 1; i < n; i += 2) // Итерация по нечётным индексам (1,3,5,...)
+    int result = 0;
+    for (size_t i = 0; i < n; i++)
     {
-        result += arr[i]; // Добавление элемента к сумме
-    }
-    return result; // Возврат суммы
-}
-
-// Подсчёт количества элементов, больших A и делящихся на 5
-int countElementsGreaterThanAAndDivisibleBy5(int* arr, const int n, int A)
-{
-    int count = 0; // Изначально количество равно 0
-    for (size_t i = 0; i < n; i++) // Итерация по всем элементам массива
-    {
-        if (arr[i] > A && arr[i] % 5 == 0) // Проверка условий
+        if (arr[i] % 3 == 0)  
         {
-            count++; // Увеличение счётчика
+            result += arr[i];
         }
     }
-    return count; // Возврат результата
+    return result;
 }
 
-// Деление элементов с чётными индексами на первый элемент массива
-void divideEvenIndexElementsByFirst(int* arr, const int n)
+size_t getIndexOfFirstNegative(int* arr, const int n)
 {
-    int divisor = arr[0]; // Первый элемент массива как делитель
-    for (size_t i = 0; i < n; i += 2) // Итерация по чётным индексам (0,2,4,...)
+    for (size_t i = 0; i < n; i++)
     {
-        if (divisor != 0) // Проверка деления на ноль
+        if (arr[i] < 0)
         {
-            arr[i] /= divisor; // Деление элемента на первый элемент
+            return i;
         }
-        else // Если делитель равен 0
+    }
+    return n;
+}
+
+void sortArray(int* arr, const int n)
+{
+    for (size_t i = 0; i < n - 1; i++)
+    {
+        for (size_t j = 0; j < n - i - 1; j++)
         {
-            // Сообщение о невозможности деления
-            cout<<"First element is zero, cannot divide."<<endl;
-            break; // Выход из цикла
+            if (arr[j] > arr[j + 1])
+            {
+                swap(arr[j], arr[j + 1]);
+            }
         }
     }
 }
 
-// Получение первого элемента массива
-int getFirstElement(int* arr, const int n)
+int* copyArray(int* arr, const int n)
 {
-    return arr[0]; // Возврат первого элемента
+    int* copyArr = new int[n];
+    for (size_t i = 0; i < n; i++)
+    {
+        copyArr[i] = arr[i];
+    }
+    return copyArr;
 }
