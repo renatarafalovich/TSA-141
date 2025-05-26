@@ -78,5 +78,5 @@ double get() {
         abort();
     }
     return value;
-}
-    
+} 
+   
