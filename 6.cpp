@@ -1,203 +1,200 @@
-#include <iostream>
-#include <cstdlib>
-#include <ctime>
-
+#include <iostream> 
+#include <cstdlib> 
+#include <ctime> 
 using namespace std;
 
 /**
- * @brief считывает целое число с клавиатуры с проверкой ввода
- * @return считанное значение
-*/
+ * @brief считывает значение с клавиатуры и проверяет
+ * @return введенное значение
+ */
 int getValue();
 
 /**
- * @brief Получает и проверяет размер массива
- * @return Размер массива
+ * @brief считывает значение с клавиатуры n и использует для проверки checkN()
+ * @return введенное значение массива
  */
 size_t getSize();
 
 /**
- * @brief Проверяет корректность размера массива
- * @param n Проверяемое значение размера
- * @return Завершает программу при n <= 0
+ * @brief проверяет, что размер массива положительный
+ * @param n - количество элементов массива
+ * @throws завершает программу, если n <= 0
  */
 void checkN(const int n);
 
 /**
- * @brief Заполняет массив случайными значениями
- * @param arr Указатель на массив
- * @param n Размер массива
- * @param minn Минимальное значение
- * @param maxn Максимальное значение
+ * @brief заполняет массив значениями, введёнными пользователем.
+ * @param arr  массив для заполнения
+ * @param n - размер массива
+ * @details заполняет каждый элемент через getValue()
  */
-void fillArrayRandom(int* arr, const int n, const int minn, const int maxn);
+void fillArray(int* arr, const int n);
+
 /**
- * @brief Заполняет массив случайными значениями
- * @param arr Указатель на массив
- * @param n Размер массива
+ * @brief заполняет массив случайными числами в диапазоне [-10, 20].
+ * @param arr - массив для заполнения
+ * @param n - размер массива
+ * @details использует rand() для генерации значений
  */
-void fillArrayManualy(int* arr, const int n);
+void fillArrayRandom(int* arr, const int n);
+
 /**
- * @brief выводит массив
- * @param arr Указатель на массив
- * @param n Размер массива
- */
-void printArray(int* arr, const int n);
-/**
- * @brief рассчитывает сумму элементов
- * @param arr Указатель на массив
- * @param n Размер массива
- */
-int sumOfElements(int* arr, const int n);
-/**
- * @brief сортирует значения массива
- * @param arr Указатель на массив
- * @param n Размер массива
- */
-void sortArray(int* arr, const int n);
-/**
- * @brief ищет отрицательные значения в массиве
- * @param arr Указатель на массив
- * @param n Размер массива
- */
-size_t getIndexOfFirstNegative(int* arr, const int n);
-/**
- * @brief создает другой массив для сортировки 
- * @param arr Указатель на массив
- * @param n Размер массива
+ * @brief создает копию массива
+ * @param arr - исходный массив
+ * @param n - размер массива
+ * @return указатель на новый массив-копию
  */
 int* copyArray(int* arr, const int n);
+
 /**
-* @brief Перечисление для выбора способа заполнения данных
-* @param MANUALY Выбор ручного заполнения массива
-* @param RANDOM Выбор автоматического заполнения массива
-*/
-enum FillMode { RANDOM, MANUALY };
-/**
- * @brief Точка входа в программу
- * @return 0 при успешном выполнении
+ * @brief выводит элементы массива в консоль
+ * @param arr - указатель на массив
+ * @param n - размер массива (выводит n элементов)
  */
+void printArray(int* arr, const int n);
+
+/**
+ * @brief вычисляет сумму элементов с нечётными индексами
+ * @param arr - указатель на массив
+ * @param n - количество элементов
+ * @return int - сумма элементов с нечётными индексами
+ */
+int sumOfOddIndexedElements(int* arr, const int n);
+
+/**
+ * @brief подсчитывает количество элементов, больших A и кратных 5
+ * @param arr - указатель на массив
+ * @param n - количество элементов
+ * @param A - число для сравнения
+ * @return количество элементов, удовлетворяющих условию
+ */
+int countElementsGreaterThanAAndMultipleOf5(int* arr, const int n, int A);
+
+/**
+ * @brief делит элементы с чётными индексами на первый элемент
+ * @param arr - указатель на массив
+ * @param n - количество элементов
+ * @details первый элемент должен быть не равен 0
+ */
+void divideEvenIndexedByFirstElement(int* arr, const int n);
+
+enum Range
+{
+    min_r = -10,
+    max_r = 20
+};
+
+enum {
+    FArray = 1,
+    FRandom = 2
+};
+
+/**
+* @brief точка входа в программу
+* @return 0, если программа выполнена корректно, иначе 1
+*/
 int main()
 {
-    size_t n = getSize();
-    int* arr = new int[n];
-    cout << "Select fill mode (0 - RANDOM, 1 - MANUAL): ";
-    int select = getValue();
-
-    switch (select)
+    srand(time(0)); //инициализирование генератора rand(), чтобы при каждом запуске программы были разные случайные числа 
+    size_t n = getSize(); //size_t беззнаковый целочисленный тип, используется  для индексов и размера массива 
+    int* arr = new int[n]; //int* — это указатель на целое число, используетсяс для передачи массивов в функции 
+    cout << "Enter the way to fill array: " << (int)FArray << " to find manually, " << (int)FRandom << " to fill randomly ? ";
+    int choice = getValue();
+    switch (choice)
     {
-    case RANDOM:
-        fillArrayRandom(arr, n, -10, 20);  // Изменен диапазон на [-10;20]
+    case FArray:
+        fillArray(arr, n);
         break;
-    case MANUALY:
-        fillArrayManualy(arr, n);
+    case FRandom:
+        fillArrayRandom(arr, n);
         break;
     default:
-        cout << "erorr" << endl;
+        cout << "Invalid choice" << endl;
         delete[] arr;
         return 1;
     }
+    int* arrCopy = copyArray(arr, n); // Создаем копию исходного массива 
+    cout << "Original array: ";
+    printArray(arr, n);
+    
+    // 1. Сумма элементов с нечётными индексами
+    cout << "Sum of elements with odd indices: " << sumOfOddIndexedElements(arrCopy, n) << endl;
+    
+    // 2. Количество элементов > A и кратных 5
+    cout << "Enter number A: ";
+    int A = getValue();
+    cout << "Count of elements greater than " << A << " and multiple of 5: " 
+         << countElementsGreaterThanAAndMultipleOf5(arrCopy, n, A) << endl;
+    
+    // 3. Деление элементов с чётными индексами на первый элемент
+    if (arrCopy[0] == 0) {
+        cout << "First element is zero, cannot divide" << endl;
+    } else {
+        divideEvenIndexedByFirstElement(arrCopy, n);
+        cout << "Array after dividing even indexed elements by first element: ";
+        printArray(arrCopy, n);
+    }
+    
     cout << "Original array: ";
     printArray(arr, n);
 
-    // Задание 1: Сумма элементов с нечетными индексами
-    int sumOddIndex = 0;
-    for (size_t i = 1; i < n; i += 2) {
-        sumOddIndex += arr[i];
-    }
-    cout << "Sum of elements with odd indices: " << sumOddIndex << endl;
-
-    // Задание 2: Количество элементов > A и кратных 5
-    cout << "Enter number A: ";
-    int A = getValue();
-    int count = 0;
-    for (size_t i = 0; i < n; i++) {
-        if (arr[i] > A && arr[i] % 5 == 0) {
-            count++;
-        }
-    }
-    cout << "Count of elements > " << A << " and multiples of 5: " << count << endl;
-
-    // Задание 3: Деление четных элементов на первый элемент
-    if (arr[0] != 0) {
-        int* modifiedArr = copyArray(arr, n);
-        for (size_t i = 1; i < n; i += 2) {  // Четные индексы (поскольку индексация с 0)
-            modifiedArr[i] /= arr[0];
-        }
-        cout << "Array after dividing even-indexed elements by first element: ";
-        printArray(modifiedArr, n);
-        delete[] modifiedArr;
-    }
-    else {
-        cout << "Cannot divide by zero (first element is 0)" << endl;
-    }
-
-    // Оригинальные выводы из кода
-    cout << "Sum of elements multiples 3: " << sumOfElements(arr, n) << endl;
-    size_t index = getIndexOfFirstNegative(arr, n);
-    if (index == n)
-    {
-        cout << "No negative elements" << endl;
-    }
-    else
-    {
-        cout << "Index of first negative element: " << index + 1 << endl;
-    }
-    int* sortArr = copyArray(arr, n);
-    sortArray(sortArr, n);
-    cout << "Sorted array: ";
-    printArray(sortArr, n);
-    delete[] sortArr;
     delete[] arr;
-
+    delete[] arrCopy;
     return 0;
 }
 
-// Остальные функции остаются без изменений
 int getValue()
 {
-    int value;
-    while (!(cin >> value)) {
-        cout << "Invalid input. Please enter an integer: ";
-        cin.clear();
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    int value = 0;
+    cin >> value;
+    if (cin.fail())
+    {
+        cout << "Error" << endl;
+        abort();
     }
     return value;
 }
 
 size_t getSize()
 {
-    cout << "Enter array size (n >= 1): ";
+    cout << "Enter n: ";
     int n = getValue();
     checkN(n);
-    return static_cast<size_t>(n);
+    return (size_t)n;
 }
 
 void checkN(const int n)
 {
     if (n <= 0)
     {
-        cout << "Error: size must be >= 1" << endl;
-        exit(1);
+        cout << "Error" << endl;
+        abort();
     }
 }
 
-void fillArrayRandom(int* arr, const int n, const int minn, const int maxn)
-{
-    srand(time(0));
-    for (size_t i = 0; i < n; i++)
-    {
-        arr[i] = rand() % (maxn - minn + 1) + minn;
-    }
-}
-
-void fillArrayManualy(int* arr, const int n)
+void fillArray(int* arr, const int n)
 {
     for (size_t i = 0; i < n; i++)
     {
-        cout << "[" << i + 1 << "] = ";
+        cout << "Enter arr[" << i + 1 << "] = ";
         arr[i] = getValue();
     }
+}
+
+void fillArrayRandom(int* arr, const int n) {
+    for (size_t i = 0; i < n; i++) {
+        arr[i] = min_r + rand() % (max_r - min_r + 1);  // Генерация числа в диапазоне[-10, 20]
+    }
+}
+
+int* copyArray(int* arr, const int n)
+{
+    int* newArr = new int[n];
+    for (size_t i = 0; i < n; i++)
+    {
+        newArr[i] = arr[i];
+    }
+    return newArr;
 }
 
 void printArray(int* arr, const int n)
@@ -209,51 +206,34 @@ void printArray(int* arr, const int n)
     cout << endl;
 }
 
-int sumOfElements(int* arr, const int n)
+int sumOfOddIndexedElements(int* arr, const int n)
 {
     int result = 0;
-    for (size_t i = 0; i < n; i++)
+    for (size_t i = 1; i < n; i += 2) // Индексы 1, 3, 5 и т.д.
     {
-        if (arr[i] % 3 == 0)  
-        {
-            result += arr[i];
-        }
+        result += arr[i];
     }
     return result;
 }
 
-size_t getIndexOfFirstNegative(int* arr, const int n)
+int countElementsGreaterThanAAndMultipleOf5(int* arr, const int n, int A)
 {
+    int count = 0;
     for (size_t i = 0; i < n; i++)
     {
-        if (arr[i] < 0)
+        if (arr[i] > A && arr[i] % 5 == 0)
         {
-            return i;
+            count++;
         }
     }
-    return n;
+    return count;
 }
 
-void sortArray(int* arr, const int n)
+void divideEvenIndexedByFirstElement(int* arr, const int n)
 {
-    for (size_t i = 0; i < n - 1; i++)
+    int firstElement = arr[0];
+    for (size_t i = 0; i < n; i += 2) // Индексы 0, 2, 4 и т.д.
     {
-        for (size_t j = 0; j < n - i - 1; j++)
-        {
-            if (arr[j] > arr[j + 1])
-            {
-                swap(arr[j], arr[j + 1]);
-            }
-        }
+        arr[i] /= firstElement;
     }
-}
-
-int* copyArray(int* arr, const int n)
-{
-    int* copyArr = new int[n];
-    for (size_t i = 0; i < n; i++)
-    {
-        copyArr[i] = arr[i];
-    }
-    return copyArr;
 }
