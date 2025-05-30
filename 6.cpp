@@ -51,7 +51,7 @@ int* copyArray(int* arr, const int n);
  * @param arr - указатель на массив
  * @param n - размер массива (выводит n элементов)
  */
-void printArray(int* arr, const int n);
+void printArray(const int* arr, const int n);
 
 /**
  * @brief вычисляет сумму элементов с нечётными индексами
@@ -59,7 +59,7 @@ void printArray(int* arr, const int n);
  * @param n - количество элементов
  * @return int - сумма элементов с нечётными индексами
  */
-int sumOfOddIndexedElements(int* arr, const int n);
+int sumOfOddIndexedElements(const int* arr, const int n);
 
 /**
  * @brief подсчитывает количество элементов, больших A и кратных 5
@@ -68,7 +68,7 @@ int sumOfOddIndexedElements(int* arr, const int n);
  * @param A - число для сравнения
  * @return количество элементов, удовлетворяющих условию
  */
-int countElementsGreaterThanAAndMultipleOf5(int* arr, const int n, int A);
+int countElementsGreaterThanAAndMultipleOf5(const int* arr, const int n, int A);
 
 /**
  * @brief делит элементы с чётными индексами на первый элемент
@@ -111,7 +111,7 @@ int main()
     default:
         cout << "Invalid choice" << endl;
         delete[] arr;
-        return 1;
+        break;
     }
     int* arrCopy = copyArray(arr, n); // Создаем копию исходного массива 
     cout << "Original array: ";
