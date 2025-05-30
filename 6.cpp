@@ -197,7 +197,7 @@ int* copyArray(int* arr, const int n)
     return newArr;
 }
 
-void printArray(int* arr, const int n)
+void printArray(const int* arr, const int n)
 {
     for (size_t i = 0; i < n; i++)
     {
@@ -206,7 +206,7 @@ void printArray(int* arr, const int n)
     cout << endl;
 }
 
-int sumOfOddIndexedElements(int* arr, const int n)
+int sumOfOddIndexedElements(const int* arr, const int n)
 {
     int result = 0;
     for (size_t i = 1; i < n; i += 2) // Индексы 1, 3, 5 и т.д.
@@ -216,7 +216,7 @@ int sumOfOddIndexedElements(int* arr, const int n)
     return result;
 }
 
-int countElementsGreaterThanAAndMultipleOf5(int* arr, const int n, int A)
+int countElementsGreaterThanAAndMultipleOf5(const int* arr, const int n, int A)
 {
     int count = 0;
     for (size_t i = 0; i < n; i++)
